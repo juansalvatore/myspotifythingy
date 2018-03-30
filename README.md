@@ -35,4 +35,4 @@ And that's it! have fun
 
 - [x] First (hmmm... horrible) version. Objective: Create simple Login test and a first querie to retrieve last played song and album cover.
 
-<img src="https://preview.ibb.co/khmGc7/screencapture_localhost_3000_2018_03_30_18_26_06.png" alt="screencapture_localhost_3000_2018_03_30_18_26_06" border="0">
+<img src="https://image.ibb.co/ccqyqS/screencapture_localhost_3000_2018_03_30_18_26_06.png" alt="screencapture_localhost_3000_2018_03_30_18_26_06" border="0">
