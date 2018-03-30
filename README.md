@@ -2,7 +2,7 @@
 
 A side project I'll build just for fun, to keep learning about react, redux, mocha and chia!
 
-## wanna play with my project and try it out? then:
+## wanna play with my project and try it out? Then...
 
 1 - `git clone ${my_repository_link}`
 
@@ -14,7 +14,8 @@ A side project I'll build just for fun, to keep learning about react, redux, moc
 
 * Create a file called keys.js outside of the main project's file
 
-  ```const CLIENT_ID = 'your client id string'
+  ```
+     const CLIENT_ID = 'your client id string'
      const CLIENT_SECRET = 'your client secret string'
 
      export default { CLIENT_ID, CLIENT_SECRET }
