@@ -29,3 +29,10 @@ A side project I'll build just for fun, to keep learning about react, redux, moc
 6 - `npm start`
 
 And that's it! have fun
+
+
+## Steps:
+
+- [x] First (hmmm... horrible) version. Objective: Create simple Login test and a first querie to retrieve last played song and album cover.
+
+<img src="https://preview.ibb.co/khmGc7/screencapture_localhost_3000_2018_03_30_18_26_06.png" alt="screencapture_localhost_3000_2018_03_30_18_26_06" border="0">
