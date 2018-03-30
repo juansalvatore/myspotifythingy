@@ -4,8 +4,8 @@ A side project I'll build just for fun, to keep learning about react, redux, moc
 
 ## wanna play with my project and try it out? then:
 
-# `git clone ${my_repository_link}`
+`git clone ${my_repository_link}`
 
-# `npm install`
+`npm install`
 
-# `create your own: client_id and client_secret on Spotify's website`
+`create your own: client_id and client_secret on Spotify's website`
