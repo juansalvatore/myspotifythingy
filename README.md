@@ -12,7 +12,7 @@ A side project I'll build just for fun, to keep learning about react, redux, moc
 
 4 - Add your CLIENT_ID and CLIENT_SECRET to ./authorization_code/app.js
 
-* Create a file called keys.js outside of the main project's file
+* Create a file called keys.js outside of the main project's directory
 
   ```
      const CLIENT_ID = 'your client id string'
