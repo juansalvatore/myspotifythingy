@@ -6,15 +6,16 @@
  * For more information, read
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
-import { CLIENT_ID, CLIENT_SECRET } from '../../keys.js'
+
+// import { CLIENT_ID, CLIENT_SECRET } from '../../keys.js'
 
 var express = require('express') // Express web server framework
 var request = require('request') // "Request" library
 var querystring = require('querystring')
 var cookieParser = require('cookie-parser')
 
-var client_id = CLIENT_ID // Your client id
-var client_secret = CLIENT_SECRET // Your secret
+var client_id = '' // Your client id
+var client_secret = '' // Your secret
 var redirect_uri = 'http://localhost:8888/callback' // Your redirect uri
 
 /**

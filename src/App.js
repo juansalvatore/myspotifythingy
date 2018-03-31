@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Spotify from 'spotify-web-api-js'
+import { geolocated } from 'react-geolocated'
 
 const spotifyWebApi = new Spotify()
+const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
 
 class App extends Component {
   constructor() {
@@ -18,6 +20,11 @@ class App extends Component {
           width: '',
           height: '',
         },
+      },
+      coordinates: {
+        latitude: -34.59,
+        longitude: -58.4359,
+        load: true,
       },
     }
     if (params.access_token) {
@@ -52,6 +59,33 @@ class App extends Component {
     })
   }
 
+  componentDidMount = props => {
+    // call to check last son played
+    this.checkNowPlaying()
+
+    // initialize mapbox map
+    mapboxgl.accessToken = ''
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v10',
+      // long lat
+      center: [0, 0],
+      zoom: 1,
+    })
+
+    map.flyTo({
+      center: [
+        this.state.coordinates.longitude,
+        this.state.coordinates.latitude,
+      ],
+      zoom: 12,
+    })
+  }
+
+  componentWillReceiveProps = props => {
+    console.log(this.props.coords)
+  }
+
   render() {
     return (
       <div className="App">
@@ -61,19 +95,52 @@ class App extends Component {
         >
           <button>Login with Spotify</button>
         </a>
-        <div style={{ display: this.state.loggedIn ? true : 'none' }}>
-          <div>Now playing {this.state.nowPlaying.name}</div>
-          <div>
-            <img
-              src={this.state.nowPlaying.image.url}
-              style={{ width: this.state.nowPlaying.image.width }}
-            />
+
+        <div
+          style={{
+            display: this.state.loggedIn ? true : 'none',
+          }}
+        >
+          <div
+            id="map"
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              width: '100%',
+              height: '100%',
+            }}
+          />
+          <div style={{ position: 'absolute' }}>
+            <div>Now playing {this.state.nowPlaying.name} </div>
+            <div>
+              <img
+                src={this.state.nowPlaying.image.url}
+                style={{ width: 200 }}
+              />
+            </div>
+            {this.props.coords != null && this.state.coordinates.load === true
+              ? this.setState({
+                  coordinates: {
+                    latitude: this.props.coords.latitude,
+                    longitude: this.props.coords.longitude,
+                    load: false,
+                  },
+                })
+              : null}
+
+            {console.log(this.state.coordinates)}
+            <button onClick={this.checkNowPlaying}>Check Now Playing</button>
           </div>
-          <button onClick={this.checkNowPlaying}>Check Now Playing</button>
         </div>
       </div>
     )
   }
 }
 
-export default App
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 5000,
+})(App)
