@@ -6,6 +6,7 @@ import { geolocated } from 'react-geolocated'
 
 const spotifyWebApi = new Spotify()
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
+let map = null
 
 class App extends Component {
   constructor() {
@@ -22,8 +23,8 @@ class App extends Component {
         },
       },
       coordinates: {
-        latitude: -34.59,
-        longitude: -58.4359,
+        latitude: 0,
+        longitude: 0,
         load: true,
       },
     }
@@ -59,31 +60,47 @@ class App extends Component {
     })
   }
 
+  saveCoordinates = nextProps => {
+    this.setState({
+      coordinates: {
+        latitude: this.props.coords.latitude,
+        longitude: this.props.coords.longitude,
+        load: false,
+      },
+    })
+
+    // SET TIMEOUT HAS TO BE CORRECTED
+  }
+
   componentDidMount = props => {
     // call to check last son played
     this.checkNowPlaying()
 
     // initialize mapbox map
     mapboxgl.accessToken = ''
-    const map = new mapboxgl.Map({
+    map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v10',
       // long lat
-      center: [0, 0],
-      zoom: 1,
-    })
-
-    map.flyTo({
       center: [
         this.state.coordinates.longitude,
         this.state.coordinates.latitude,
       ],
-      zoom: 12,
+      zoom: 1,
     })
   }
 
-  componentWillReceiveProps = props => {
-    console.log(this.props.coords)
+  componentDidUpdate(props) {
+    console.log('PROPS UNDEFINED: ', this.props.coords != null)
+    if (this.props.coords != null) {
+      map.flyTo({
+        center: [
+          this.state.coordinates.longitude,
+          this.state.coordinates.latitude,
+        ],
+        zoom: 12,
+      })
+    }
   }
 
   render() {
@@ -119,14 +136,9 @@ class App extends Component {
                 style={{ width: 200 }}
               />
             </div>
+
             {this.props.coords != null && this.state.coordinates.load === true
-              ? this.setState({
-                  coordinates: {
-                    latitude: this.props.coords.latitude,
-                    longitude: this.props.coords.longitude,
-                    load: false,
-                  },
-                })
+              ? this.saveCoordinates()
               : null}
 
             {console.log(this.state.coordinates)}
@@ -141,6 +153,7 @@ class App extends Component {
 export default geolocated({
   positionOptions: {
     enableHighAccuracy: false,
+    timeout: Infinity,
   },
-  userDecisionTimeout: 5000,
+  userDecisionTimeout: null,
 })(App)
