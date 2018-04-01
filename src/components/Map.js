@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import '../css/App.css'
 import Spotify from 'spotify-web-api-js'
 import { geolocated } from 'react-geolocated'
 
@@ -8,20 +7,12 @@ const spotifyWebApi = new Spotify()
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
 let map = null
 
-class App extends Component {
+class Map extends Component {
   constructor() {
     super()
     const params = this.getHashParams()
     this.state = {
       loggedIn: params.access_token ? true : false,
-      nowPlaying: {
-        name: 'Not Checked',
-        image: {
-          url: '',
-          width: '',
-          height: '',
-        },
-      },
       coordinates: {
         latitude: 0,
         longitude: 0,
@@ -44,22 +35,6 @@ class App extends Component {
     return hashParams
   }
 
-  checkNowPlaying = () => {
-    spotifyWebApi.getMyCurrentPlaybackState().then(response => {
-      console.log('Response is: ', response)
-      this.setState({
-        nowPlaying: {
-          name: response.item.name,
-          image: {
-            url: response.item.album.images[0].url,
-            width: response.item.album.images[0].width,
-            height: response.item.album.images[0].height,
-          },
-        },
-      })
-    })
-  }
-
   saveCoordinates = nextProps => {
     this.setState({
       coordinates: {
@@ -68,30 +43,26 @@ class App extends Component {
         load: false,
       },
     })
-
-    // SET TIMEOUT HAS TO BE CORRECTED
   }
 
   componentDidMount = props => {
-    // call to check last son played
-    this.checkNowPlaying()
-
     // initialize mapbox map
     mapboxgl.accessToken = ''
     map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v10',
+      style: 'mapbox://styles/juansalvatore2/cjfg0h9lc0ytu2rs37esypzw7',
+      attributionControl: false,
+      pitch: 50,
       // long lat
       center: [
         this.state.coordinates.longitude,
         this.state.coordinates.latitude,
       ],
-      zoom: 1,
+      zoom: 3,
     })
   }
 
   componentDidUpdate(props) {
-    console.log('PROPS UNDEFINED: ', this.props.coords != null)
     if (this.props.coords != null) {
       map.flyTo({
         center: [
@@ -105,7 +76,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="Map">
         <a
           style={{ display: this.state.loggedIn ? 'none' : true }}
           href="http://localhost:8888"
@@ -118,42 +89,41 @@ class App extends Component {
             display: this.state.loggedIn ? true : 'none',
           }}
         >
+          {/* MAP */}
           <div
-            id="map"
             style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              width: '100%',
-              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100vh',
             }}
-          />
-          <div style={{ position: 'absolute' }}>
-            <div>Now playing {this.state.nowPlaying.name} </div>
-            <div>
-              <img
-                src={this.state.nowPlaying.image.url}
-                style={{ width: 200 }}
-              />
-            </div>
-
+          >
+            <div
+              id="map"
+              style={{
+                position: 'absolute',
+                width: '99%',
+                height: '98%',
+              }}
+            />
+            {/* Save where the user is located and fly */}
             {this.props.coords != null && this.state.coordinates.load === true
               ? this.saveCoordinates()
               : null}
-
-            {console.log(this.state.coordinates)}
-            <button onClick={this.checkNowPlaying}>Check Now Playing</button>
           </div>
+          {/* SPOTIFY */}
         </div>
       </div>
     )
   }
 }
 
-export default geolocated({
+Map = geolocated({
   positionOptions: {
-    enableHighAccuracy: false,
+    enableHighAccuracy: true,
     timeout: Infinity,
   },
   userDecisionTimeout: null,
-})(App)
+})(Map)
+
+export { Map }
